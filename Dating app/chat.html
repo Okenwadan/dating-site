@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ballers Connect - Chat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fef3f8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      padding: 15px;
+      background: #e60073;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .me {
+      align-self: flex-end;
+      background: #e60073;
+      color: white;
+      border-bottom-right-radius: 2px;
+    }
+
+    .them {
+      align-self: flex-start;
+      background: #ddd;
+      color: #222;
+      border-bottom-left-radius: 2px;
+    }
+
+    .input-bar {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background: white;
+    }
+
+    .input-bar input {
+      flex: 1;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+
+    .input-bar button {
+      background: #e60073;
+      color: white;
+      border: none;
+      margin-left: 10px;
+      padding: 10px 16px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .input-bar button:hover {
+      background: #c80060;
+    }
+  </style>
+</head>
+<body>
+
+  <header>💬 Chat with Bae</header>
+
+  <div class="chat-box" id="chatBox">
+    <div class="msg them">Hey cutie 😉</div>
+    <div class="msg me">Heyyy! 😍</div>
+  </div>
+
+  <div class="input-bar">
+    <input type="text" id="messageInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const text = input.value.trim();
+
+      if (text !== "") {
+        const msg = document.createElement("div");
+        msg.className = "msg me";
+        msg.textContent = text;
+
+        document.getElementById("chatBox").appendChild(msg);
+        input.value = "";
+        scrollToBottom();
+      }
+    }
+
+    function scrollToBottom() {
+      const chat = document.getElementById("chatBox");
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>

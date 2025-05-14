@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div class="love-container"></div>
+    <div class="landing-container"> 
+        <h1 class="bounce"> Welcome to Ballers Connect</h1>
+         <P><i>Find love, connect and build real relationships...</i>
+        </P> 
+        <div class="button -group">
+         <a href="login.html" class="btn">Login</a>
+         <a href="signup.html" class="btn">Sign Up</a>
+           </form>
+    </div>
+    </div>
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.querySelector('.love-container');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      container.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 4000);
+    }
+    setInterval(createHeart, 500);
+  });
+</script>
+    </body>
+</html>

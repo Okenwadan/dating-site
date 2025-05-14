@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating app</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div class="container"> 
+        <h3> Lets build your profile to continue</h3>
+        <h5>Connecting ballers around the world...</h5>
+        <form id="profileform">
+            <div class="form-group">
+                        <input type="file" id="profilePic" accept="Upload image/*" required/>
+                    </div>
+            <!--<input type="text" id="gender" placeholder="Gender (e.g., Male/Female/Others)" required/>-->
+            <!--Gender selection dropdown-->
+             <div class="form-group">
+           <select id="gender" required>
+                <option value="" disabled selected> Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="feMale">Female</option>
+                <option value="Non-binary">Non-binary</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+            </div>
+            <div class="form-group">
+                <input type="number" id="age" placeholder="Age" required min="18"/>
+            </div>
+            <div class="form-group"><textarea id="Bio"placeholder="Bio" rows="4" required>
+            </textarea>
+        </div>
+            <button type="submit">Save Profile</button>
+        </form>
+    </div>
+    <script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ballers Connect</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #b60000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .splash {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .splash h1 {
+      font-size: 32px;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="splash">
+    <h1>Ballers Connect</h1>
+    <p>Loading your experience...</p>
+  <div class="love-container">
+  </div>
+  </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.querySelector('.love-container');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      container.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 4000);
+    }
+    setInterval(createHeart, 500);
+  });
+</script>
+  <script>
+    setTimeout(function() {
+      window.location.href = "logsign.html";
+    }, 9000); // 12 seconds
+  </script>
+</body>
+</html>

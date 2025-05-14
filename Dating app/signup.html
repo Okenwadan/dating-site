@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Dating app</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div class="love-container"></div>
+    <div class="container"> 
+        <h2> Create an account</h2> <span> <P><i>let's Connect...</i></P> </span>
+                    <form id="signupForm">
+            <input type="text"  placeholder="Full Name" required/>
+            <input type="email" id="SignupEmail" placeholder="Email" required/>
+             <input type="Password" id="SignupPassword" placeholder="Password" required/>
+             <input type="Password" id="confirmPassword" placeholder="Confirm Password" required/>
+            <button type="submit">Nyem nwa oma</button>
+            <a href="profile.html"></a>
+        </form>
+<p>Already have an account? <a href="login.html">Login</a> </p>
+    </div>
+    <script src="signup.js"></script>
+
+        <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.querySelector('.love-container');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      container.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 4000);
+    }
+    setInterval(createHeart, 500);
+  });
+</script>
+
+</body>
+</html>

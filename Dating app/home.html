@@ -1,0 +1,99 @@
+<script>if (!localstorage.getItem("isLoggedIn")){window.location.href = "login.html";}</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ballers Connect - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff0f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      color: #e60073;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-buttons a {
+      text-decoration: none;
+      background: #e60073;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    .nav-buttons a:hover {
+      background: #c80060;
+    }
+
+    .logout {
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Welcome, <span id="username">Baller</span> 👋</h1>
+    <p>Glad to have you back on Ballers Connect 💖</p>
+
+    <div class="nav-buttons">
+      <a href="match.html"><i class="fas fa-heart"></i> Start Matching</a>
+      <a href="profile.html"><i class="fas fa-user"></i> View Profile</a>
+      <a href="chat.html"><i class="fas fa-comment-dots"></i> Chat</a>
+    </div>
+
+    <div class="logout" onclick="logout()">🚪 Logout</div>
+  </div>
+
+  <script>
+    // Show username if stored from login/signup
+    const name = localStorage.getItem("fullname");
+    if (name) {
+      document.getElementById("username").textContent = name;
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "logsign.html";
+    }
+  </script>
+
+</body>
+</html>

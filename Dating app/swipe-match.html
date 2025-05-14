@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swipe Match with Icons</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #fff0f5;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin: 20px;
+      color: #e60073;
+    }
+
+    #card-stack {
+      position: relative;
+      width: 300px;
+      height: 440px;
+    }
+
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      will-change: transform;
+      touch-action: none;
+    }
+
+    .card img {
+      width: 100%;
+      height: 70%;
+      border-radius: 20px 20px 0 0;
+      object-fit: cover;
+    }
+
+    .card h2 {
+      margin: 10px 0 5px;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .icon-like,
+    .icon-dislike {
+      position: absolute;
+      font-size: 40px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 999;
+    }
+
+    .icon-like {
+      top: 20px;
+      left: 30px;
+      color: #27ae60;
+    }
+
+    .icon-dislike {
+      top: 20px;
+      right: 30px;
+      color: #c0392b;
+    }
+
+    .message {
+      margin-top: 20px;
+      color: #e60073;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find Your Match</h1>
+
+  <div class="icon-like"><i class="fas fa-heart"></i></div>
+  <div class="icon-dislike"><i class="fas fa-times"></i></div>
+
+  <div id="card-stack">
+    <div class="card">
+      <img src="https://randomuser.me/api/portraits/women/72.jpg" />
+      <h2>Joy, 26</h2>
+      <p>“Loves poetry & jazz music”</p>
+    </div>
+    <div class="card">
+      <img src="https://randomuser.me/api/portraits/men/44.jpg" />
+      <h2>Chris, 30</h2>
+      <p>“Gamer and movie nerd”</p>
+    </div>
+    <div class="card">
+      <img src="https://randomuser.me/api/portraits/women/65.jpg" />
+      <h2>Ella, 24</h2>
+      <p>“Adventurer & foodie”</p>
+    </div>
+  </div>
+
+  <div class="message" id="status"></div>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const status = document.getElementById("status");
+    const iconLike = document.querySelector('.icon-like');
+    const iconDislike = document.querySelector('.icon-dislike');
+    let startX = null;
+    let currentCard = null;
+
+    cards.forEach((card, i) => {
+      card.style.zIndex = cards.length - i;
+
+      card.addEventListener('pointerdown', e => {
+        startX = e.clientX;
+        currentCard = card;
+        card.setPointerCapture(e.pointerId);
+      });
+
+      card.addEventListener('pointermove', e => {
+        if (!startX) return;
+        const dx = e.clientX - startX;
+        card.style.transform = `translateX(${dx}px) rotate(${dx / 10}deg)`;
+
+        // Show icons
+        if (dx > 50) {
+          iconLike.style.opacity = '1';
+          iconDislike.style.opacity = '0';
+        } else if (dx < -50) {
+          iconLike.style.opacity = '0';
+          iconDislike.style.opacity = '1';
+        } else {
+          iconLike.style.opacity = '0';
+          iconDislike.style.opacity = '0';
+        }
+      });
+
+      card.addEventListener('pointerup', e => {
+        if (!startX) return;
+        const dx = e.clientX - startX;
+        iconLike.style.opacity = '0';
+        iconDislike.style.opacity = '0';
+
+        if (dx > 120) {
+          swipeCard(card, 'right');
+        } else if (dx < -120) {
+          swipeCard(card, 'left');
+        } else {
+          card.style.transform = '';
+        }
+        startX = null;
+      });
+    });
+
+    function swipeCard(card, direction) {
+      card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      card.style.transform = direction === 'right'
+        ? 'translateX(400px) rotate(20deg)'
+        : 'translateX(-400px) rotate(-20deg)';
+      card.style.opacity = 0;
+
+      setTimeout(() => {
+        card.remove();
+        status.textContent = direction === 'right'
+          ? "💖 You liked them!"
+          : "❌ Not interested.";
+      }, 300);
+    }
+    window.location.href = "match-success.html"
+  </script>
+
+</body>
+</html>

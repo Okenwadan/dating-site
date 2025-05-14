@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>It's a Match!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ff99cc, #ff3366);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      animation: popIn 0.5s ease-in-out;
+    }
+
+    p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .profiles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: white;
+      object-fit: cover;
+      animation: bounce 1s infinite;
+    }
+
+    .btn-group a {
+      display: inline-block;
+      background: white;
+      color: #e60073;
+      padding: 12px 25px;
+      margin: 10px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-group a:hover {
+      background: #e60073;
+      color: white;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 It’s a Match!</h1>
+  <p>You and <strong>Ada</strong> liked each other 💖</p>
+
+  <div class="profiles">
+    <img src="your-profile.jpg" alt="You" class="profile-pic" />
+    <img src="ada-profile.jpg" alt="Ada" class="profile-pic" />
+  </div>
+
+  <div class="btn-group">
+    <a href="chat.html"><i class="fas fa-comments"></i> Start Chatting</a>
+    <a href="match.html"><i class="fas fa-redo"></i> Keep Swiping</a>
+  </div>
+
+</body>
+</html>
