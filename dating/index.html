@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BALLERS CONNECT</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="splash">
+        <div style="text-align:center;">
+            <h1 class="heartbeat" style="font-size:2.5em;color:#2d98da;margin-bottom:0.2em;">BALLERS CONNECT</h1>
+            <div style="color:#888;font-size:1.2em;margin-bottom:1.5em;">Find your unique connection!</div>
+            <div class="heartbeat" style="font-size:2.5em;">💖</div>
+        </div>
+    </div>
+    <div class="container" id="authApp" style="display:none;">
+        <h1>BALLERS CONNECT</h1>
+        <div class="tagline">Find your unique connection!</div>
+        <div class="auth-container">
+            <form id="loginForm">       
+                <div class="form-group">
+                    <label for="loginName">Name</label>
+                    <input type="text" id="loginName" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+                <div style="text-align:right;margin-top:8px;">
+                    <a href="#" id="forgotPasswordLink" style="color:#2d98da;font-size:0.98em;">Forgot Password?</a>
+                </div>
+            </form>
+            <div class="auth-toggle" style="margin-top:18px; display:flex; justify-content:center; gap:8px;">
+                <button id="showLogin" class="active" type="button">Login</button>
+                <span style="color:#888;align-self:center;">|</span>
+                <button id="showSignup" type="button">Sign Up</button>
+            </div>
+            <form id="signupForm" style="display:none;">
+                <div class="profile-photo-upload">
+                    <img id="signupPhotoPreview" class="profile-photo-preview" src="" alt="Profile Photo" style="display:none;" />
+                    <label for="signupPhoto">Upload Profile Photo</label>
+                    <input type="file" id="signupPhoto" accept="image/*" />
+                </div>
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" required>
+                </div>                <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>                <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="e.g. +1234567890" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupDob">Date of Birth</label>
+                    <div style="display:flex;gap:8px;">
+                        <select id="dobYear" required></select>
+                        <select id="dobMonth" required></select>
+                        <select id="dobDay" required></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupBio">Short Bio</label>
+                    <textarea id="signupBio" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="signupInterests">Interests (comma separated)</label>
+                    <input type="text" id="signupInterests" required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <div style="text-align:center;margin:18px 0 0 0;">
+                    <span style="color:#888;">or sign up with</span>
+                    <div style="margin-top:10px;display:flex;justify-content:center;gap:12px;">
+                        <button type="button" class="social-btn gmail-btn" id="signupGmailBtn" title="Sign up with Gmail">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail" style="width:22px;height:22px;vertical-align:middle;"> Gmail
+                        </button>
+                        <button type="button" class="social-btn facebook-btn" id="signupFacebookBtn" title="Sign up with Facebook">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" style="width:22px;height:22px;vertical-align:middle;"> Facebook
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container" id="mainApp" style="display:none;">
+        <h1>BALLERS CONNECT</h1>
+        <div class="tagline">Find your unique connection!</div>
+        <button id="logoutBtn" style="margin-bottom:20px;background:#fff;color:#2d98da;border:2px solid #2d98da;">Logout</button>
+        <div class="profiles" id="profiles">
+            <!-- Profiles will appear here -->
+        </div>
+    </div>
+        <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script>
+        // --- Firebase Config ---
+        const firebaseConfig = {
+  apiKey: "AIzaSyCSZUOyTvAqYpczKrpI4jkJb-fRsrw30-c",
+  authDomain: "ballersconnect-f4627.firebaseapp.com",
+  databaseURL: "https://ballersconnect-f4627-default-rtdb.firebaseio.com",
+  projectId: "ballersconnect-f4627",
+  storageBucket: "ballersconnect-f4627.firebasestorage.app",
+  messagingSenderId: "788308968695",
+  appId: "1:788308968695:web:8707270cd1992d7e8bbff2"
+};
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const rtdb = firebase.database();
+        // --- End Firebase Config ---
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>

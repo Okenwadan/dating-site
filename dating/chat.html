@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - BALLERS CONNECT</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .chat-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        .chat-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #eee;
+            background: #7ed6df;
+            color: #2d98da;
+            border-radius: 16px 16px 0 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 18px 16px;
+            overflow-y: auto;
+            background: #f6f8fa;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .message-row.sent {
+            flex-direction: row-reverse;
+        }
+        .message {
+            max-width: 70%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 1em;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .message.sent {
+            align-self: flex-end;
+            background: #2d98da;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .message.received {
+            align-self: flex-start;
+            background: #eaf6fb;
+            color: #2d98da;
+            border-bottom-left-radius: 4px;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2d98da;
+        }
+        .chat-input {
+            display: flex;
+            padding: 16px;
+            border-top: 1px solid #eee;
+            background: #fff;
+            border-radius: 0 0 16px 16px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+        }
+        .chat-input button {
+            margin-left: 10px;
+            background: #2d98da;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-input button:hover {
+            background: #7ed6df;
+        }
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .timestamp {
+            font-size: 0.75em;
+            color: #aaa;
+            margin-top: 2px;
+            align-self: flex-end;
+        }
+        .emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            right: 24px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 8px;
+            display: none;
+            z-index: 10;
+            max-width: 220px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .emoji-picker span {
+            font-size: 1.3em;
+            cursor: pointer;
+            margin: 2px;
+        }
+        .emoji-btn {
+            background: none;
+            border: none;
+            font-size: 1.3em;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .chat-container {
+                max-width: 100vw;
+                margin: 0;
+                border-radius: 0;
+                height: 100vh;
+            }
+            .chat-header, .chat-input {
+                border-radius: 0;
+            }
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 100vh;
+            background: #2d98da;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 0;
+            gap: 18px;
+            z-index: 20;
+        }
+        .sidebar .sidebar-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+        .sidebar .sidebar-chat {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #7ed6df;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: border 0.2s;
+        }
+        .sidebar .sidebar-chat.active {
+            border: 2px solid #fff;
+        }
+        .sidebar .sidebar-nav {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sidebar .sidebar-nav button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.3em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img class="sidebar-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="You" />
+        <img class="sidebar-chat active" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jamie" title="Jamie" />
+        <img class="sidebar-chat" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Alex" title="Alex" />
+        <img class="sidebar-chat" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sam" title="Sam" />
+        <div class="sidebar-nav">
+            <button onclick="window.location.href='index.html'" title="Back to Main">🏠</button>
+        </div>
+    </div>
+    <div class="chat-container" style="margin-left:80px;">
+        <div class="chat-header" id="chatHeader">
+            <span style="font-size:1.5em;">💬</span> 
+            <span id="chatWith">Chat with Jamie</span>
+            <span id="onlineStatus" style="margin-left:auto;font-size:0.9em;color:#27ae60;">● Online</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be rendered here -->
+            <div id="typingIndicator" style="display:none; color:#888; font-style:italic; margin: 0 0 0 8px;">Jamie is typing...</div>
+        </div>
+        <form class="chat-input" id="chatForm" autocomplete="off" style="position:relative;">
+            <input type="text" id="chatInput" placeholder="Type your message..." required />
+            <button type="button" class="emoji-btn" id="emojiBtn" title="Add emoji">😊</button>
+            <div class="emoji-picker" id="emojiPicker">
+                <span>😀</span><span>😂</span><span>😍</span><span>😎</span><span>😢</span><span>😡</span><span>👍</span><span>🙏</span><span>🎉</span><span>❤️</span><span>🔥</span><span>🍕</span><span>🍿</span><span>🥳</span><span>😅</span>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <!-- Profile Quick View Modal -->
+    <div id="profileModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;">
+        <div style="background:#fff;padding:32px 24px;border-radius:16px;max-width:320px;width:90vw;box-shadow:0 4px 24px rgba(0,0,0,0.12);text-align:center;position:relative;">
+            <button id="closeProfileModal" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.3em;cursor:pointer;">✖️</button>
+            <img id="modalAvatar" src="https://randomuser.me/api/portraits/women/44.jpg" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #2d98da;margin-bottom:12px;" />
+            <h2 id="modalName" style="margin:0 0 8px 0;">Jamie</h2>
+            <div id="modalStatus" style="font-size:0.95em;color:#27ae60;margin-bottom:8px;">● Online</div>
+            <div style="color:#888;font-size:0.95em;">Loves movies, travel, and good food 🍕🍿</div>
+        </div>
+    </div>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script>
+        // --- Firebase Config ---
+        const firebaseConfig = {
+  apiKey: "AIzaSyCSZUOyTvAqYpczKrpI4jkJb-fRsrw30-c",
+  authDomain: "ballersconnect-f4627.firebaseapp.com",
+  databaseURL: "https://ballersconnect-f4627-default-rtdb.firebaseio.com",
+  projectId: "ballersconnect-f4627",
+  storageBucket: "ballersconnect-f4627.firebasestorage.app",
+  messagingSenderId: "788308968695",
+  appId: "1:788308968695:web:8707270cd1992d7e8bbff2"
+};
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const rtdb = firebase.database();
+
+        // --- User Profile Data (replace with real data or backend integration) ---
+        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {
+            name: 'You',
+            avatar: 'assets/avatars/you.png',
+            status: 'Online',
+            uid: 'user1'
+        };
+        const chatPartner = JSON.parse(localStorage.getItem('chatPartner')) || {
+            name: 'Jamie',
+            avatar: 'assets/avatars/jamie.png',
+            status: 'Online',
+            bio: 'Loves movies, travel, and good food 🍕🍿',
+            uid: 'user2'
+        };
+        const chatId = [currentUser.uid, chatPartner.uid].sort().join('_');
+
+        // --- Chat Data & State ---
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const emojiBtn = document.getElementById('emojiBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const onlineStatus = document.getElementById('onlineStatus');
+        const chatHeader = document.getElementById('chatHeader');
+        const profileModal = document.getElementById('profileModal');
+        const closeProfileModal = document.getElementById('closeProfileModal');
+        const modalAvatar = document.getElementById('modalAvatar');
+        const modalName = document.getElementById('modalName');
+        const modalStatus = document.getElementById('modalStatus');
+        let isTabFocused = true;
+        let isPartnerOnline = false;
+        let unreadCount = 0;
+
+        // --- Update Sidebar Avatars Dynamically ---
+        document.querySelector('.sidebar-avatar').src = currentUser.avatar;
+        document.querySelector('.sidebar-avatar').alt = currentUser.name;
+        document.querySelector('.sidebar-chat.active').src = chatPartner.avatar;
+        document.querySelector('.sidebar-chat.active').alt = chatPartner.name;
+        document.querySelector('.sidebar-chat.active').title = chatPartner.name;
+
+        document.getElementById('chatWith').textContent = `Chat with ${chatPartner.name}`;
+
+        // --- Firestore: Listen for Messages ---
+        function renderMessages(messages) {
+            chatMessages.innerHTML = '';
+            messages.forEach(msg => {
+                const row = document.createElement('div');
+                row.className = 'message-row ' + (msg.sender === currentUser.uid ? 'sent' : 'received');
+                const avatar = document.createElement('img');
+                avatar.className = 'avatar';
+                avatar.src = msg.sender === currentUser.uid ? currentUser.avatar : chatPartner.avatar;
+                avatar.alt = msg.sender === currentUser.uid ? currentUser.name : chatPartner.name;
+                avatar.style.cursor = 'pointer';
+                avatar.onclick = function() {
+                    showProfileModal(msg.sender === currentUser.uid ? 'you' : 'partner');
+                };
+                const msgContent = document.createElement('div');
+                msgContent.className = 'message-content';
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message ' + (msg.sender === currentUser.uid ? 'sent' : 'received');
+                msgDiv.textContent = msg.text;
+                // Read receipt for sent messages
+                if (msg.sender === currentUser.uid) {
+                    const receipt = document.createElement('span');
+                    receipt.title = msg.read ? 'Read' : 'Delivered';
+                    receipt.style.fontSize = '1em';
+                    receipt.style.marginLeft = '6px';
+                    receipt.innerHTML = msg.read ? '✔✔' : '✔';
+                    msgDiv.appendChild(receipt);
+                }
+                msgContent.appendChild(msgDiv);
+                const time = document.createElement('span');
+                time.className = 'timestamp';
+                time.textContent = msg.time;
+                msgContent.appendChild(time);
+                if (msg.sender === currentUser.uid) {
+                    row.appendChild(msgContent);
+                    row.appendChild(avatar);
+                } else {
+                    row.appendChild(avatar);
+                    row.appendChild(msgContent);
+                }
+                chatMessages.appendChild(row);
+            });
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        db.collection('chats').doc(chatId).collection('messages')
+            .orderBy('timestamp')
+            .onSnapshot(snapshot => {
+                const messages = [];
+                snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
+                renderMessages(messages);
+                // Mark as read if focused
+                if (isTabFocused) markAllAsRead(messages);
+            });
+
+        // --- Send Message ---
+        chatForm.onsubmit = async function(e) {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+            const now = new Date();
+            await db.collection('chats').doc(chatId).collection('messages').add({
+                text,
+                sender: currentUser.uid,
+                time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            });
+            chatInput.value = '';
+            setTyping(false);
+        };
+
+        // --- Mark All As Read ---
+        async function markAllAsRead(messages) {
+            const batch = db.batch();
+            messages.forEach(msg => {
+                if (msg.sender === currentUser.uid && !msg.read) {
+                    const ref = db.collection('chats').doc(chatId).collection('messages').doc(msg.id);
+                    batch.update(ref, { read: true });
+                }
+            });
+            await batch.commit();
+        }
+
+        // --- Typing Indicator (Realtime DB) ---
+        function setTyping(isTyping) {
+            rtdb.ref(`typing/${chatId}/${currentUser.uid}`).set(isTyping);
+        }
+        chatInput.addEventListener('input', function() {
+            setTyping(chatInput.value.length > 0);
+        });
+        rtdb.ref(`typing/${chatId}/${chatPartner.uid}`).on('value', snap => {
+            typingIndicator.style.display = snap.val() ? 'block' : 'none';
+        });
+
+        // --- Online Status (Realtime DB) ---
+        function setOnlineStatus(isOnline) {
+            rtdb.ref(`status/${currentUser.uid}`).set(isOnline ? 'online' : 'offline');
+        }
+        window.addEventListener('focus', () => setOnlineStatus(true));
+        window.addEventListener('blur', () => setOnlineStatus(false));
+        rtdb.ref(`status/${chatPartner.uid}`).on('value', snap => {
+            isPartnerOnline = snap.val() === 'online';
+            onlineStatus.textContent = isPartnerOnline ? '● Online' : '● Offline';
+            onlineStatus.style.color = isPartnerOnline ? '#27ae60' : '#aaa';
+            modalStatus.textContent = isPartnerOnline ? '● Online' : '● Offline';
+            modalStatus.style.color = isPartnerOnline ? '#27ae60' : '#aaa';
+        });
+        setOnlineStatus(true);
+
+        // --- Profile Quick View Modal ---
+        function showProfileModal(user) {
+            if (user === 'partner') {
+                modalAvatar.src = chatPartner.avatar;
+                modalName.textContent = chatPartner.name;
+                modalStatus.textContent = isPartnerOnline ? '● Online' : '● Offline';
+                modalStatus.style.color = isPartnerOnline ? '#27ae60' : '#aaa';
+                modalAvatar.alt = chatPartner.name;
+                modalName.textContent = chatPartner.name;
+                modalStatus.textContent = isPartnerOnline ? '● Online' : '● Offline';
+                modalStatus.style.color = isPartnerOnline ? '#27ae60' : '#aaa';
+                modalAvatar.nextElementSibling.nextElementSibling.textContent = chatPartner.bio || '';
+            } else {
+                modalAvatar.src = currentUser.avatar;
+                modalName.textContent = currentUser.name;
+                modalStatus.textContent = currentUser.status;
+                modalStatus.style.color = '#27ae60';
+                modalAvatar.alt = currentUser.name;
+                modalAvatar.nextElementSibling.nextElementSibling.textContent = currentUser.bio || '';
+            }
+            profileModal.style.display = 'flex';
+        }
+        closeProfileModal.onclick = function() {
+            profileModal.style.display = 'none';
+        };
+        profileModal.onclick = function(e) {
+            if (e.target === profileModal) profileModal.style.display = 'none';
+        };
+
+        // --- Chat Input & Emoji ---
+        emojiBtn.onclick = function(e) {
+            e.preventDefault();
+            emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
+        };
+        emojiPicker.onclick = function(e) {
+            if (e.target.tagName === 'SPAN') {
+                chatInput.value += e.target.textContent;
+                emojiPicker.style.display = 'none';
+                chatInput.focus();
+                setTyping(true);
+            }
+        };
+        document.addEventListener('click', function(e) {
+            if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
+                emojiPicker.style.display = 'none';
+            }
+        });
+
+        // --- Push Notifications ---
+        function showPushNotification(title, body) {
+            if (window.Notification && Notification.permission === 'granted') {
+                new Notification(title, { body, icon: chatPartner.avatar });
+            }
+        }
+        if (window.Notification && Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+
+        // --- Tab Focus/Blur for Push Notifications ---
+        window.addEventListener('focus', () => {
+            isTabFocused = true;
+            unreadCount = 0;
+            updateTitle();
+        });
+        window.addEventListener('blur', () => {
+            isTabFocused = false;
+        });
+        function updateTitle() {
+            document.title = unreadCount > 0 ? `(${unreadCount}) New message - BALLERS CONNECT` : 'Chat - BALLERS CONNECT';
+        }
+
+    </script>
+</body>
+</html>

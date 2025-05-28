@@ -1,0 +1,189 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #7ed6df 0%, #f6e58d 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+.container {
+    max-width: 400px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+}
+h1 {
+    text-align: center;
+    color: #2d98da;
+    margin-bottom: 8px;
+}
+.tagline {
+    text-align: center;
+    color: #888;
+    margin-bottom: 32px;
+}
+.form-group {
+    margin-bottom: 18px;
+}
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+}
+.form-group select {
+    width: 32%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    margin-right: 2px;
+}
+.form-group select:last-child {
+    margin-right: 0;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2d98da;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.profiles {
+    margin-top: 40px;
+}
+.profile-card {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.profile-card h3 {
+    margin: 0 0 6px 0;
+    color: #2d98da;
+}
+.profile-card p {
+    margin: 0 0 8px 0;
+    color: #555;
+}
+.actions {
+    display: flex;
+    gap: 10px;
+}
+.actions button {
+    flex: 1;
+    background: #fff;
+    color: #2d98da;
+    border: 2px solid #2d98da;
+    transition: background 0.2s, color 0.2s;
+}
+.actions button.like {
+    background: #2d98da;
+    color: #fff;
+}
+.actions button:hover {
+    background: #7ed6df;
+    color: #fff;
+}
+#splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #7ed6df 0%, #f6e58d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.heartbeat {
+    animation: heartbeat 1.2s infinite;
+}
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.2); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.2); }
+    70% { transform: scale(1); }
+}
+.auth-container {
+    margin-top: 24px;
+}
+.auth-toggle {
+    text-align: center;
+    margin-bottom: 18px;
+}
+.auth-toggle button {
+    background: none;
+    border: none;
+    color: #2d98da;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 0;
+}
+.auth-toggle button.active {
+    text-decoration: underline;
+}
+/* Responsive design for mobile */
+@media (max-width: 500px) {
+    .container {
+        max-width: 98vw;
+        margin: 16px auto;
+        padding: 16px 4vw;
+        border-radius: 10px;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    .tagline {
+        font-size: 1em;
+    }
+    .profile-card {
+        padding: 10px;
+    }
+    button, input, textarea, select {
+        font-size: 1em;
+    }
+}
+
+/* Profile photo upload styles */
+.profile-photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 18px;
+}
+.profile-photo-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+    margin-bottom: 8px;
+    border: 2px solid #2d98da;
+}
+.profile-photo-upload label {
+    color: #2d98da;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 6px;
+}
+.profile-photo-upload input[type="file"] {
+    display: none;
+}

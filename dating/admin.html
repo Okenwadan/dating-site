@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - BALLERS CONNECT</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #f6f8fa; }
+        .admin-container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px 24px; }
+        h1 { color: #2d98da; text-align: center; }
+        .admin-section { margin: 32px 0; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+        .admin-table th, .admin-table td { border: 1px solid #eee; padding: 8px; text-align: left; }
+        .admin-table th { background: #eaf6fb; color: #2d98da; }
+        .admin-btn { background: #e74c3c; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; }
+        .admin-btn:hover { background: #c0392b; }
+        .logout-btn { background: #2d98da; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; float: right; }
+        .logout-btn:hover { background: #7ed6df; color: #2d98da; }
+        .admin-login { max-width: 340px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 32px 24px; }
+        .admin-login input { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #ddd; border-radius: 6px; }
+        .admin-login button { width: 100%; padding: 12px; background: #2d98da; color: #fff; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; }
+        .admin-login button:hover { background: #7ed6df; color: #2d98da; }
+    </style>
+</head>
+<body>
+    <div id="adminLogin" class="admin-login">
+        <h2>Admin Login</h2>
+        <input type="email" id="adminEmail" placeholder="Admin Email" required />
+        <input type="password" id="adminPassword" placeholder="Password" required />
+        <button id="adminLoginBtn">Login</button>
+        <div id="adminLoginError" style="color:#e74c3c;margin-top:10px;"></div>
+    </div>
+    <div id="adminPanel" class="admin-container" style="display:none;">
+        <button class="logout-btn" id="adminLogoutBtn">Logout</button>
+        <h1>Admin Panel</h1>
+        <div class="admin-section">
+            <h2>Users</h2>
+            <table class="admin-table" id="usersTable">
+                <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- Add more admin sections here (reports, analytics, etc.) -->
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script>
+    // --- Firebase Config (reuse from app) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSZUOyTvAqYpczKrpI4jkJb-fRsrw30-c",
+      authDomain: "ballersconnect-f4627.firebaseapp.com",
+      databaseURL: "https://ballersconnect-f4627-default-rtdb.firebaseio.com",
+      projectId: "ballersconnect-f4627",
+      storageBucket: "ballersconnect-f4627.firebasestorage.app",
+      messagingSenderId: "788308968695",
+      appId: "1:788308968695:web:8707270cd1992d7e8bbff2"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // --- Admin Auth (simple: only allow specific email) ---
+    const ADMIN_EMAIL = "admin@ballersconnect.com"; // Change to your admin email
+
+    const adminLogin = document.getElementById('adminLogin');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    const adminLoginError = document.getElementById('adminLoginError');
+
+    adminLoginBtn.onclick = async function() {
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+        try {
+            const result = await firebase.auth().signInWithEmailAndPassword(email, password);
+            if (result.user.email !== ifydan2004@gmail.com) {
+                throw new Error('Not authorized as admin.');
+            }
+            adminLogin.style.display = 'none';
+            adminPanel.style.display = 'block';
+            loadUsers();
+        } catch (err) {
+            adminLoginError.textContent = err.message;
+        }
+    };
+    adminLogoutBtn.onclick = function() {
+        firebase.auth().signOut();
+        adminPanel.style.display = 'none';
+        adminLogin.style.display = 'block';
+    };
+
+    // --- Load Users ---
+    async function loadUsers() {
+        const usersTable = document.getElementById('usersTable').querySelector('tbody');
+        usersTable.innerHTML = '';
+        const usersSnap = await db.collection('users').get();
+        usersSnap.forEach(doc => {
+            const u = doc.data();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${u.name || ''}</td><td>${u.email || ''}</td><td>${u.status || ''}</td><td><button class='admin-btn' onclick='banUser("${doc.id}")'>Ban</button></td>`;
+            usersTable.appendChild(tr);
+        });
+    }
+    // --- Ban User (set status to Banned) ---
+    window.banUser = async function(uid) {
+        await db.collection('users').doc(uid).update({ status: 'Banned' });
+        loadUsers();
+    };
+    </script>
+</body>
+</html>
